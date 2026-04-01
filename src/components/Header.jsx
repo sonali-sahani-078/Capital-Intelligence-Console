@@ -13,9 +13,24 @@ export function Header({ role, darkMode, onRoleChange, onThemeToggle }) {
             <option value="admin">Admin</option>
           </select>
         </label>
-        <button className="ghost" onClick={onThemeToggle}>
-          {darkMode ? 'Light Mode' : 'Dark Mode'}
-        </button>
+
+        <label className="theme-toggle-wrap" htmlFor="theme-toggle">
+          Theme
+          <button
+            id="theme-toggle"
+            type="button"
+            className={`theme-toggle ${darkMode ? 'on' : 'off'}`}
+            onClick={onThemeToggle}
+            role="switch"
+            aria-checked={darkMode}
+            aria-label="Toggle dark mode"
+          >
+            <span className="toggle-track">
+              <span className="toggle-thumb" />
+            </span>
+            <span className="toggle-text">{darkMode ? 'Dark' : 'Light'}</span>
+          </button>
+        </label>
       </div>
     </header>
   )
