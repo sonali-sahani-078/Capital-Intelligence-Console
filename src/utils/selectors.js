@@ -32,17 +32,21 @@ export function getFilteredTransactions(transactions, filters, sort) {
 
 export function getMonthlyTrend(transactions) {
   const byMonth = transactions.reduce((acc, tx) => {
+    const monthKey = tx.date.slice(0, 7)
     const label = monthLabel(tx.date)
-    if (!acc[label]) acc[label] = 0
-    acc[label] += tx.type === 'income' ? tx.amount : -tx.amount
+    if (!acc[monthKey]) acc[monthKey] = { label, net: 0 }
+    acc[monthKey].net += tx.type === 'income' ? tx.amount : -tx.amount
     return acc
   }, {})
 
   let running = 0
-  return Object.entries(byMonth).map(([label, net]) => {
-    running += net
-    return { label, balance: running }
-  })
+  return Object.keys(byMonth)
+    .sort((a, b) => a.localeCompare(b))
+    .map((monthKey) => {
+      const month = byMonth[monthKey]
+      running += month.net
+      return { label: month.label, balance: running }
+    })
 }
 
 export function getCategorySpend(transactions) {
@@ -77,8 +81,13 @@ export function getInsights(transactions, categorySpend, formatCurrency) {
 
   if (latest && previous) {
     const diff = latest[1] - previous[1]
-    const trend = diff > 0 ? 'up' : 'down'
-    comparison = `${latest[0]} spending is ${Math.abs(diff)} ${trend} vs ${previous[0]}.`
+
+    if (diff === 0) {
+      comparison = `${latest[0]} spending is unchanged vs ${previous[0]}.`
+    } else {
+      const trend = diff > 0 ? 'higher' : 'lower'
+      comparison = `${latest[0]} spending is ${formatCurrency(Math.abs(diff))} ${trend} vs ${previous[0]}.`
+    }
   }
 
   const avgExpense = categorySpend.length

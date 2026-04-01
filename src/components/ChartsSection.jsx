@@ -7,7 +7,14 @@ function BalanceTrendChart({ data }) {
   const [activePoint, setActivePoint] = useState(null)
   const width = 520
   const height = 240
-  const padding = 34
+  const padding = {
+    top: 18,
+    right: 20,
+    bottom: 32,
+    left: 86,
+  }
+  const plotWidth = width - padding.left - padding.right
+  const plotHeight = height - padding.top - padding.bottom
 
   const values = data.map((d) => d.balance)
   const minValue = Math.min(...values)
@@ -15,8 +22,8 @@ function BalanceTrendChart({ data }) {
   const range = Math.max(maxValue - minValue, 1)
 
   const points = data.map((d, index) => {
-    const x = padding + (index * (width - padding * 2)) / Math.max(data.length - 1, 1)
-    const y = height - padding - ((d.balance - minValue) / range) * (height - padding * 2)
+    const x = padding.left + (index * plotWidth) / Math.max(data.length - 1, 1)
+    const y = height - padding.bottom - ((d.balance - minValue) / range) * plotHeight
     return { x, y, ...d }
   })
 
@@ -25,13 +32,37 @@ function BalanceTrendChart({ data }) {
     return Array.from({ length: count + 1 }, (_, i) => {
       const ratio = i / count
       const value = maxValue - ratio * range
-      const y = padding + ratio * (height - padding * 2)
+      const y = padding.top + ratio * plotHeight
       return { y, value }
     })
-  }, [maxValue, range])
+  }, [maxValue, plotHeight, range])
 
   const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
-  const areaPath = `${linePath} L ${points[points.length - 1].x} ${height - padding} L ${points[0].x} ${height - padding} Z`
+  const areaPath = `${linePath} L ${points[points.length - 1].x} ${height - padding.bottom} L ${points[0].x} ${height - padding.bottom} Z`
+
+  const tooltip = useMemo(() => {
+    if (!activePoint) return null
+    const boxWidth = 156
+    const boxHeight = 34
+    const spacing = 12
+    const minX = 4
+    const maxX = width - boxWidth - 4
+    const minY = 4
+    const maxY = height - boxHeight - 4
+    const preferredX = activePoint.x - boxWidth / 2
+    const preferredY = activePoint.y - boxHeight - spacing
+    const x = Math.min(Math.max(preferredX, minX), maxX)
+    const y = Math.min(Math.max(preferredY, minY), maxY)
+
+    return {
+      x,
+      y,
+      textX: x + boxWidth / 2,
+      textY: y + 21,
+      boxWidth,
+      boxHeight,
+    }
+  }, [activePoint, height, width])
 
   return (
     <div className="line-chart-wrap">
@@ -45,8 +76,8 @@ function BalanceTrendChart({ data }) {
 
         {yTicks.map((tick) => (
           <g key={tick.y}>
-            <line x1={padding} x2={width - padding} y1={tick.y} y2={tick.y} className="grid-line" />
-            <text x={8} y={tick.y + 4} className="axis-text">
+            <line x1={padding.left} x2={width - padding.right} y1={tick.y} y2={tick.y} className="grid-line" />
+            <text x={padding.left - 8} y={tick.y + 4} textAnchor="end" className="axis-text">
               {formatCurrency(Math.round(tick.value))}
             </text>
           </g>
@@ -68,10 +99,10 @@ function BalanceTrendChart({ data }) {
           </g>
         ))}
 
-        {activePoint && (
+        {activePoint && tooltip && (
           <g className="chart-tooltip">
-            <rect x={activePoint.x - 72} y={activePoint.y - 46} width="144" height="34" rx="8" className="tooltip-box" />
-            <text x={activePoint.x} y={activePoint.y - 25} textAnchor="middle" className="tooltip-text">
+            <rect x={tooltip.x} y={tooltip.y} width={tooltip.boxWidth} height={tooltip.boxHeight} rx="8" className="tooltip-box" />
+            <text x={tooltip.textX} y={tooltip.textY} textAnchor="middle" className="tooltip-text">
               {`${activePoint.label}: ${formatCurrency(activePoint.balance)}`}
             </text>
           </g>

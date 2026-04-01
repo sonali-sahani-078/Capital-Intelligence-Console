@@ -34,6 +34,7 @@
 
 .eyebrow { margin: 0; font-size: 0.77rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
 h1 { margin: 0.42rem 0 0; font-family: 'Space Grotesk', 'Segoe UI', sans-serif; font-size: clamp(1.55rem, 2.3vw, 2.3rem); letter-spacing: -0.02em; text-wrap: balance; }
+.topbar-sub { margin-top: 0.45rem; max-width: 620px; color: var(--muted); font-size: 0.9rem; line-height: 1.45; }
 h2, h3, p { margin: 0; }
 h3 { letter-spacing: -0.01em; }
 .topbar-actions { display: flex; gap: 0.65rem; align-items: center; }
@@ -90,6 +91,11 @@ button.ghost:hover, button.sort:hover { border-color: color-mix(in srgb, var(--p
 .card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--primary), #fff 35%); box-shadow: 0 18px 40px rgba(7, 17, 18, 0.14); }
 .card p { color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
 .card h2 { margin-top: 0.35rem; font-size: 1.55rem; letter-spacing: -0.01em; }
+.metric-card { display: grid; gap: 0.45rem; }
+.metric-chip { width: fit-content; border-radius: 999px; padding: 0.24rem 0.58rem; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.02em; border: 1px solid var(--line); color: var(--muted); background: color-mix(in srgb, var(--surface-alt), #fff 8%); }
+.metric-chip.good { color: var(--income); border-color: color-mix(in srgb, var(--income), transparent 55%); background: color-mix(in srgb, var(--income), transparent 89%); }
+.metric-chip.risk { color: var(--expense); border-color: color-mix(in srgb, var(--expense), transparent 55%); background: color-mix(in srgb, var(--expense), transparent 89%); }
+.metric-chip.neutral { color: var(--text); }
 
 .charts-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .panel { padding: 1rem; transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease; animation: riseIn 600ms ease both; }
@@ -175,3 +181,4 @@ th button.sort { padding: 0; border: 0; background: transparent; font-weight: 80
 @keyframes drawLine { to { stroke-dashoffset: 0; } }
 @keyframes donutIn { from { stroke-dasharray: 0 999; } }
 @keyframes fadeArea { from { opacity: 0; } to { opacity: 1; } }
+

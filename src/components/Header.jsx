@@ -3,7 +3,8 @@ export function Header({ role, darkMode, onRoleChange, onThemeToggle }) {
     <header className="topbar">
       <div>
         <p className="eyebrow">Financial Activity Dashboard</p>
-        <h1>Money Flow Monitor</h1>
+        <h1>Capital Intelligence Console</h1>
+        <p className="topbar-sub">A clean, decision-ready view of cash flow, spending behavior, and monthly momentum.</p>
       </div>
       <div className="topbar-actions">
         <label>
