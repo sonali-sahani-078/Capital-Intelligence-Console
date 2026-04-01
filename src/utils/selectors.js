@@ -1,0 +1,96 @@
+import { monthLabel } from './formatters'
+
+export function getSummary(transactions) {
+  const income = transactions.filter((t) => t.type === 'income').reduce((sum, t) => sum + t.amount, 0)
+  const expenses = transactions.filter((t) => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0)
+  return { income, expenses, balance: income - expenses }
+}
+
+export function getFilteredTransactions(transactions, filters, sort) {
+  const search = filters.search.trim().toLowerCase()
+  const next = transactions.filter((item) => {
+    if (filters.type !== 'all' && item.type !== filters.type) return false
+    if (filters.category !== 'all' && item.category !== filters.category) return false
+    if (!search) return true
+    return (
+      item.category.toLowerCase().includes(search) ||
+      item.note.toLowerCase().includes(search) ||
+      item.amount.toString().includes(search)
+    )
+  })
+
+  next.sort((a, b) => {
+    const dir = sort.direction === 'asc' ? 1 : -1
+    if (sort.key === 'amount') return (a.amount - b.amount) * dir
+    if (sort.key === 'category') return a.category.localeCompare(b.category) * dir
+    if (sort.key === 'type') return a.type.localeCompare(b.type) * dir
+    return (new Date(a.date).getTime() - new Date(b.date).getTime()) * dir
+  })
+
+  return next
+}
+
+export function getMonthlyTrend(transactions) {
+  const byMonth = transactions.reduce((acc, tx) => {
+    const label = monthLabel(tx.date)
+    if (!acc[label]) acc[label] = 0
+    acc[label] += tx.type === 'income' ? tx.amount : -tx.amount
+    return acc
+  }, {})
+
+  let running = 0
+  return Object.entries(byMonth).map(([label, net]) => {
+    running += net
+    return { label, balance: running }
+  })
+}
+
+export function getCategorySpend(transactions) {
+  const byCategory = transactions
+    .filter((tx) => tx.type === 'expense')
+    .reduce((acc, tx) => {
+      acc[tx.category] = (acc[tx.category] || 0) + tx.amount
+      return acc
+    }, {})
+
+  return Object.entries(byCategory)
+    .map(([category, amount]) => ({ category, amount }))
+    .sort((a, b) => b.amount - a.amount)
+}
+
+export function getInsights(transactions, categorySpend, formatCurrency) {
+  if (!transactions.length) return null
+
+  const topCategory = categorySpend[0]
+  const monthExpense = transactions
+    .filter((tx) => tx.type === 'expense')
+    .reduce((acc, tx) => {
+      const m = monthLabel(tx.date)
+      acc[m] = (acc[m] || 0) + tx.amount
+      return acc
+    }, {})
+
+  const monthList = Object.entries(monthExpense)
+  const latest = monthList[monthList.length - 1]
+  const previous = monthList[monthList.length - 2]
+  let comparison = 'No monthly comparison available yet.'
+
+  if (latest && previous) {
+    const diff = latest[1] - previous[1]
+    const trend = diff > 0 ? 'up' : 'down'
+    comparison = `${latest[0]} spending is ${Math.abs(diff)} ${trend} vs ${previous[0]}.`
+  }
+
+  const avgExpense = categorySpend.length
+    ? categorySpend.reduce((sum, item) => sum + item.amount, 0) / categorySpend.length
+    : 0
+  const stable = avgExpense ? topCategory.amount < avgExpense * 1.2 : true
+
+  return {
+    topCategory: topCategory ? `${topCategory.category} (${formatCurrency(topCategory.amount)})` : 'No expense data',
+    comparison,
+    observation: stable
+      ? 'Spending is relatively balanced across categories.'
+      : `${topCategory.category} is materially higher than your category average.`,
+  }
+}

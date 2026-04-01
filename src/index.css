@@ -1,0 +1,63 @@
+:root {
+  --bg: #f4f8f8;
+  --surface: #ffffff;
+  --surface-alt: #eaf2f2;
+  --text: #172121;
+  --muted: #4f6666;
+  --line: #d2dfdf;
+  --income: #146c43;
+  --expense: #b02a37;
+  --primary: #0f766e;
+  --primary-soft: #d9f3ee;
+  --shadow: 0 14px 35px rgba(23, 33, 33, 0.08);
+}
+
+body[data-theme='dark'] {
+  --bg: #121b1d;
+  --surface: #182325;
+  --surface-alt: #1d2c2f;
+  --text: #e6f0f0;
+  --muted: #9cb2b2;
+  --line: #2e4649;
+  --income: #58c38f;
+  --expense: #ef7f88;
+  --primary: #4cc5b5;
+  --primary-soft: #1f393c;
+  --shadow: 0 14px 35px rgba(0, 0, 0, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 8% -15%, rgba(15, 118, 110, 0.24), transparent 36%),
+    radial-gradient(circle at 85% 0%, rgba(232, 185, 120, 0.24), transparent 28%),
+    radial-gradient(circle at 50% 120%, rgba(15, 118, 110, 0.16), transparent 38%),
+    var(--bg);
+  color: var(--text);
+  font-family: 'Manrope', 'Segoe UI', sans-serif;
+  transition: background 280ms ease, color 280ms ease;
+  background-size: 120% 120%;
+  animation: ambientShift 22s ease-in-out infinite alternate;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@keyframes ambientShift {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: 100% 100%;
+  }
+}
