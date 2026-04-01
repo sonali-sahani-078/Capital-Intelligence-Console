@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useReducer } from 'react'
+import { useEffect, useMemo, useReducer, useState } from 'react'
 import { STORAGE_KEY, defaultState } from '../data/initialData'
+import { fetchTransactions, saveTransactions } from '../api/mockApi'
 import { financeReducer } from '../utils/reducer'
 import {
   getCategorySpend,
   getFilteredTransactions,
+  getGroupedTransactions,
   getInsights,
   getMonthlyTrend,
   getSummary,
@@ -30,9 +32,25 @@ function loadState() {
 
 export function useFinanceDashboard() {
   const [state, dispatch] = useReducer(financeReducer, defaultState, loadState)
+  const [isLoading, setIsLoading] = useState(false)
+  const [syncStatus, setSyncStatus] = useState('idle')
 
   useEffect(() => {
     document.body.dataset.theme = state.darkMode ? 'dark' : 'light'
+  }, [state.darkMode])
+
+  useEffect(() => {
+    setIsLoading(true)
+    fetchTransactions()
+      .then((transactions) => {
+        if (!localStorage.getItem(STORAGE_KEY)) {
+          dispatch({ type: 'setTransactions', transactions })
+        }
+      })
+      .finally(() => setIsLoading(false))
+  }, [])
+
+  useEffect(() => {
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({
@@ -43,6 +61,15 @@ export function useFinanceDashboard() {
         sort: state.sort,
       }),
     )
+
+    setSyncStatus('syncing')
+    const timer = setTimeout(() => {
+      saveTransactions(state.transactions)
+        .then(() => setSyncStatus('synced'))
+        .catch(() => setSyncStatus('error'))
+    }, 280)
+
+    return () => clearTimeout(timer)
   }, [state])
 
   const categories = useMemo(
@@ -53,6 +80,10 @@ export function useFinanceDashboard() {
   const filteredTransactions = useMemo(
     () => getFilteredTransactions(state.transactions, state.filters, state.sort),
     [state.transactions, state.filters, state.sort],
+  )
+  const groupedTransactions = useMemo(
+    () => getGroupedTransactions(filteredTransactions, state.filters.groupBy),
+    [filteredTransactions, state.filters.groupBy],
   )
   const monthlyTrend = useMemo(() => getMonthlyTrend(state.transactions), [state.transactions])
   const categorySpend = useMemo(() => getCategorySpend(state.transactions), [state.transactions])
@@ -67,8 +98,11 @@ export function useFinanceDashboard() {
     categories,
     summary,
     filteredTransactions,
+    groupedTransactions,
     monthlyTrend,
     categorySpend,
     insights,
+    isLoading,
+    syncStatus,
   }
 }

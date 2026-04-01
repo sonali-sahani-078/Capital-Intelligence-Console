@@ -1,6 +1,7 @@
 import { formatCurrency } from '../utils/formatters'
+import { exportTransactionsAsCsv, exportTransactionsAsJson } from '../utils/exporters'
 
-export function TransactionsSection({ state, categories, transactions, dispatch }) {
+export function TransactionsSection({ state, categories, transactions, groupedTransactions, dispatch, isLoading, syncStatus }) {
   return (
     <section className="panel">
       <div className="section-head">
@@ -27,8 +28,50 @@ export function TransactionsSection({ state, categories, transactions, dispatch 
               </option>
             ))}
           </select>
+          <input
+            type="date"
+            value={state.filters.fromDate}
+            onChange={(e) => dispatch({ type: 'setFilter', key: 'fromDate', value: e.target.value })}
+            aria-label="From date"
+          />
+          <input
+            type="date"
+            value={state.filters.toDate}
+            onChange={(e) => dispatch({ type: 'setFilter', key: 'toDate', value: e.target.value })}
+            aria-label="To date"
+          />
+          <input
+            type="number"
+            min="0"
+            placeholder="Min amount"
+            value={state.filters.minAmount}
+            onChange={(e) => dispatch({ type: 'setFilter', key: 'minAmount', value: e.target.value })}
+          />
+          <input
+            type="number"
+            min="0"
+            placeholder="Max amount"
+            value={state.filters.maxAmount}
+            onChange={(e) => dispatch({ type: 'setFilter', key: 'maxAmount', value: e.target.value })}
+          />
+          <select
+            value={state.filters.groupBy}
+            onChange={(e) => dispatch({ type: 'setFilter', key: 'groupBy', value: e.target.value })}
+            aria-label="Group by"
+          >
+            <option value="none">No grouping</option>
+            <option value="category">Group by category</option>
+            <option value="month">Group by month</option>
+            <option value="type">Group by type</option>
+          </select>
+          <button className="ghost" onClick={() => exportTransactionsAsCsv(transactions)}>Export CSV</button>
+          <button className="ghost" onClick={() => exportTransactionsAsJson(transactions)}>Export JSON</button>
         </div>
       </div>
+
+      <p className="status-line">
+        {isLoading ? 'Loading mock API data...' : `API sync: ${syncStatus}`}
+      </p>
 
       {state.role === 'admin' && (
         <div className="editor">
@@ -62,6 +105,20 @@ export function TransactionsSection({ state, categories, transactions, dispatch 
               Cancel
             </button>
           )}
+        </div>
+      )}
+
+      {!!groupedTransactions.length && (
+        <div className="group-panel">
+          {groupedTransactions.map((group) => (
+            <article key={group.key}>
+              <p>{group.label}</p>
+              <strong>{group.count} txn</strong>
+              <span>Income {formatCurrency(group.income)}</span>
+              <span>Expenses {formatCurrency(group.expenses)}</span>
+              <span>Net {formatCurrency(group.net)}</span>
+            </article>
+          ))}
         </div>
       )}
 

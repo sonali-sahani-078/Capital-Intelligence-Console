@@ -72,6 +72,8 @@ export function financeReducer(state, action) {
       }
       return { ...state, transactions: [next, ...state.transactions], draft: defaultState.draft }
     }
+    case 'setTransactions':
+      return { ...state, transactions: action.transactions }
     default:
       return state
   }

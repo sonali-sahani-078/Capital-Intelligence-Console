@@ -13,9 +13,12 @@ function App() {
     categories,
     summary,
     filteredTransactions,
+    groupedTransactions,
     monthlyTrend,
     categorySpend,
     insights,
+    isLoading,
+    syncStatus,
   } = useFinanceDashboard()
 
   return (
@@ -32,7 +35,10 @@ function App() {
         state={state}
         categories={categories}
         transactions={filteredTransactions}
+        groupedTransactions={groupedTransactions}
         dispatch={dispatch}
+        isLoading={isLoading}
+        syncStatus={syncStatus}
       />
       <InsightsSection insights={insights} />
     </div>

@@ -8,9 +8,16 @@ export function getSummary(transactions) {
 
 export function getFilteredTransactions(transactions, filters, sort) {
   const search = filters.search.trim().toLowerCase()
+  const minAmount = filters.minAmount === '' ? null : Number(filters.minAmount)
+  const maxAmount = filters.maxAmount === '' ? null : Number(filters.maxAmount)
+
   const next = transactions.filter((item) => {
     if (filters.type !== 'all' && item.type !== filters.type) return false
     if (filters.category !== 'all' && item.category !== filters.category) return false
+    if (filters.fromDate && item.date < filters.fromDate) return false
+    if (filters.toDate && item.date > filters.toDate) return false
+    if (minAmount !== null && !Number.isNaN(minAmount) && item.amount < minAmount) return false
+    if (maxAmount !== null && !Number.isNaN(maxAmount) && item.amount > maxAmount) return false
     if (!search) return true
     return (
       item.category.toLowerCase().includes(search) ||
@@ -28,6 +35,33 @@ export function getFilteredTransactions(transactions, filters, sort) {
   })
 
   return next
+}
+
+export function getGroupedTransactions(transactions, groupBy) {
+  if (groupBy === 'none') return []
+
+  const byKey = transactions.reduce((acc, tx) => {
+    const key =
+      groupBy === 'month'
+        ? tx.date.slice(0, 7)
+        : groupBy === 'category'
+          ? tx.category
+          : tx.type
+
+    if (!acc[key]) {
+      acc[key] = { key, label: groupBy === 'month' ? monthLabel(`${key}-01`) : key, count: 0, income: 0, expenses: 0 }
+    }
+
+    acc[key].count += 1
+    if (tx.type === 'income') acc[key].income += tx.amount
+    if (tx.type === 'expense') acc[key].expenses += tx.amount
+
+    return acc
+  }, {})
+
+  return Object.values(byKey)
+    .map((group) => ({ ...group, net: group.income - group.expenses }))
+    .sort((a, b) => a.label.localeCompare(b.label))
 }
 
 export function getMonthlyTrend(transactions) {
