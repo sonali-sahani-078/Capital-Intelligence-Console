@@ -1,15 +1,48 @@
+import { useEffect, useMemo, useRef } from 'react'
 import { formatCurrency } from '../utils/formatters'
 import { exportTransactionsAsCsv, exportTransactionsAsJson } from '../utils/exporters'
 
 export function TransactionsSection({ state, categories, transactions, groupedTransactions, dispatch, isLoading, syncStatus }) {
+  const searchRef = useRef(null)
+  const activeFilters = useMemo(() => {
+    const items = []
+    if (state.filters.search) items.push(`Search: ${state.filters.search}`)
+    if (state.filters.type !== 'all') items.push(`Type: ${state.filters.type}`)
+    if (state.filters.category !== 'all') items.push(`Category: ${state.filters.category}`)
+    if (state.filters.fromDate) items.push(`From: ${state.filters.fromDate}`)
+    if (state.filters.toDate) items.push(`To: ${state.filters.toDate}`)
+    if (state.filters.minAmount) items.push(`Min: ${state.filters.minAmount}`)
+    if (state.filters.maxAmount) items.push(`Max: ${state.filters.maxAmount}`)
+    if (state.filters.groupBy !== 'none') items.push(`Group: ${state.filters.groupBy}`)
+    return items
+  }, [state.filters])
+
+  useEffect(() => {
+    const onKeyDown = (event) => {
+      if (event.key === '/' && !event.metaKey && !event.ctrlKey && !event.altKey) {
+        const target = event.target
+        const tag = target?.tagName?.toLowerCase()
+        if (tag !== 'input' && tag !== 'textarea' && tag !== 'select') {
+          event.preventDefault()
+          searchRef.current?.focus()
+        }
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
+
+  const sortArrow = state.sort.direction === 'asc' ? '↑' : '↓'
+
   return (
     <section className="panel">
       <div className="section-head">
         <h3>Transactions</h3>
         <div className="controls">
           <input
+            ref={searchRef}
             type="search"
-            placeholder="Search by category, note, amount"
+            placeholder="Search by category, note, amount (/)"
             value={state.filters.search}
             onChange={(e) => dispatch({ type: 'setFilter', key: 'search', value: e.target.value })}
           />
@@ -64,6 +97,9 @@ export function TransactionsSection({ state, categories, transactions, groupedTr
             <option value="month">Group by month</option>
             <option value="type">Group by type</option>
           </select>
+          <button className="ghost" onClick={() => dispatch({ type: 'resetFilters' })} disabled={!activeFilters.length}>
+            Clear Filters
+          </button>
           <button className="ghost" onClick={() => exportTransactionsAsCsv(transactions)}>Export CSV</button>
           <button className="ghost" onClick={() => exportTransactionsAsJson(transactions)}>Export JSON</button>
         </div>
@@ -72,6 +108,18 @@ export function TransactionsSection({ state, categories, transactions, groupedTr
       <p className="status-line">
         {isLoading ? 'Loading mock API data...' : `API sync: ${syncStatus}`}
       </p>
+      <div className="result-meta">
+        <strong>{transactions.length}</strong> matching records
+      </div>
+      {!!activeFilters.length && (
+        <div className="active-filters">
+          {activeFilters.map((label) => (
+            <span key={label} className="filter-chip">
+              {label}
+            </span>
+          ))}
+        </div>
+      )}
 
       {state.role === 'admin' && (
         <div className="editor">
@@ -129,10 +177,10 @@ export function TransactionsSection({ state, categories, transactions, groupedTr
           <table>
             <thead>
               <tr>
-                <th><button className="sort" onClick={() => dispatch({ type: 'setSort', key: 'date' })}>Date</button></th>
-                <th><button className="sort" onClick={() => dispatch({ type: 'setSort', key: 'amount' })}>Amount</button></th>
-                <th><button className="sort" onClick={() => dispatch({ type: 'setSort', key: 'category' })}>Category</button></th>
-                <th><button className="sort" onClick={() => dispatch({ type: 'setSort', key: 'type' })}>Type</button></th>
+                <th><button className="sort" onClick={() => dispatch({ type: 'setSort', key: 'date' })}>Date {state.sort.key === 'date' ? sortArrow : ''}</button></th>
+                <th><button className="sort" onClick={() => dispatch({ type: 'setSort', key: 'amount' })}>Amount {state.sort.key === 'amount' ? sortArrow : ''}</button></th>
+                <th><button className="sort" onClick={() => dispatch({ type: 'setSort', key: 'category' })}>Category {state.sort.key === 'category' ? sortArrow : ''}</button></th>
+                <th><button className="sort" onClick={() => dispatch({ type: 'setSort', key: 'type' })}>Type {state.sort.key === 'type' ? sortArrow : ''}</button></th>
                 <th>Note</th>
                 <th>Risk Flag</th>
                 {state.role === 'admin' && <th>Actions</th>}

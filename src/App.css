@@ -45,6 +45,32 @@ h1 { margin: 0.42rem 0 0; font-family: 'Space Grotesk', 'Segoe UI', sans-serif; 
   height: auto;
 }
 .topbar-sub { margin-top: 0.45rem; max-width: 620px; color: var(--muted); font-size: 0.9rem; line-height: 1.45; }
+.topbar-meta { margin-top: 0.7rem; display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.status-pill {
+  border-radius: 999px;
+  padding: 0.24rem 0.62rem;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface-alt), #fff 8%);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.status-pill.good {
+  border-color: color-mix(in srgb, var(--income), transparent 50%);
+  color: var(--income);
+  background: color-mix(in srgb, var(--income), transparent 88%);
+}
+.status-pill.warn {
+  border-color: color-mix(in srgb, #f59e0b, transparent 50%);
+  color: #d97706;
+  background: color-mix(in srgb, #f59e0b, transparent 90%);
+}
+.status-pill.risk {
+  border-color: color-mix(in srgb, var(--expense), transparent 50%);
+  color: var(--expense);
+  background: color-mix(in srgb, var(--expense), transparent 88%);
+}
+.status-pill.neutral { color: var(--muted); }
 h2, h3, p { margin: 0; }
 h3 { letter-spacing: -0.01em; }
 .topbar-actions { display: flex; gap: 0.65rem; align-items: center; }
@@ -61,6 +87,12 @@ select, input, button {
 }
 
 select:hover, input:hover { border-color: color-mix(in srgb, var(--primary), #fff 35%); }
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 select:focus-visible, input:focus-visible, button:focus-visible {
   outline: none;
   border-color: color-mix(in srgb, var(--primary), #fff 20%);
@@ -200,6 +232,25 @@ th button.sort { padding: 0; border: 0; background: transparent; font-weight: 80
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+.result-meta {
+  margin: -0.25rem 0 0.7rem;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 0.8rem;
+}
+.filter-chip {
+  border-radius: 999px;
+  padding: 0.24rem 0.54rem;
+  border: 1px solid color-mix(in srgb, var(--primary), transparent 45%);
+  background: color-mix(in srgb, var(--primary-soft), #fff 2%);
+  font-size: 0.76rem;
+  font-weight: 700;
 }
 
 .group-panel {

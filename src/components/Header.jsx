@@ -1,6 +1,21 @@
 import { TitleWordmark } from './TitleWordmark'
 
-export function Header({ role, darkMode, onRoleChange, onThemeToggle }) {
+function getSyncMeta(syncStatus) {
+  if (syncStatus === 'synced') return { label: 'Synced', tone: 'good' }
+  if (syncStatus === 'syncing') return { label: 'Syncing', tone: 'warn' }
+  if (syncStatus === 'error') return { label: 'Sync error', tone: 'risk' }
+  return { label: 'Idle', tone: 'neutral' }
+}
+
+export function Header({ role, darkMode, syncStatus, totalTransactions, onRoleChange, onThemeToggle }) {
+  const syncMeta = getSyncMeta(syncStatus)
+  const refreshLabel = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  }).format(new Date())
+
   return (
     <header className="topbar">
       <div>
@@ -9,6 +24,11 @@ export function Header({ role, darkMode, onRoleChange, onThemeToggle }) {
           <TitleWordmark />
         </div>
         <p className="topbar-sub">A clean, decision-ready view of cash flow, spending behavior, and monthly momentum.</p>
+        <div className="topbar-meta">
+          <span className={`status-pill ${syncMeta.tone}`}>System: {syncMeta.label}</span>
+          <span className="status-pill neutral">Records: {totalTransactions}</span>
+          <span className="status-pill neutral">Refreshed: {refreshLabel}</span>
+        </div>
       </div>
       <div className="topbar-actions">
         <label>

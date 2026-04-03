@@ -8,6 +8,8 @@ export function financeReducer(state, action) {
       return { ...state, darkMode: !state.darkMode }
     case 'setFilter':
       return { ...state, filters: { ...state.filters, [action.key]: action.value } }
+    case 'resetFilters':
+      return { ...state, filters: defaultState.filters }
     case 'setSort': {
       if (state.sort.key === action.key) {
         return {

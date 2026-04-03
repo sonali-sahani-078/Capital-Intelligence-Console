@@ -34,6 +34,8 @@ function App() {
       <Header
         role={state.role}
         darkMode={state.darkMode}
+        syncStatus={syncStatus}
+        totalTransactions={state.transactions.length}
         onRoleChange={(role) => dispatch({ type: 'setRole', role })}
         onThemeToggle={() => dispatch({ type: 'toggleDark' })}
       />
