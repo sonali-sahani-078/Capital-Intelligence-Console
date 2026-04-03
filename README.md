@@ -1,74 +1,65 @@
-# Financial Activity Dashboard (React)
+# Capital Intelligence Console
 
-A responsive React dashboard for tracking and understanding financial activity, built to satisfy design, responsiveness, functionality, UX, technical quality, and state-management evaluation criteria.
+A React + Vite financial operations dashboard for tracking transactions, governance metrics, planning signals, and executive insights in one place.
 
-## Evaluation Criteria Coverage
+## Highlights
 
-1. Design and Creativity
-- Intentional visual language with custom typography, gradients, and card-based hierarchy.
-- Clear information architecture: Overview -> Charts -> Transactions -> Insights.
+- Executive summary cards for balance, income, and expenses.
+- Monthly trend and category spend visualizations.
+- Governance panel with KPI snapshots, budget overview, and risk alerts.
+- Planning panel with forecast metrics, recurring transaction patterns, and data quality checks.
+- Transactions workspace with:
+  - Search and advanced filters (type, category, date range, amount range).
+  - Grouping (category, month, type) and sortable columns.
+  - CSV and JSON export.
+  - Quick search shortcut using `/`.
+- Simulated role-based access:
+  - `viewer`: read-only dashboard access.
+  - `admin`: add/edit transactions inline.
+- Light/dark theme toggle and local persistence.
+- Mock API sync status indicators (`idle`, `syncing`, `synced`, `error`).
 
-2. Responsiveness
-- Mobile-first breakpoints for `980px` and `640px`.
-- Charts, cards, and insights collapse to single-column on smaller screens.
-- Table supports horizontal scrolling for constrained widths.
+## Tech Stack
 
-3. Functionality
-- Summary cards: Total Balance, Income, Expenses.
-- Time-based visualization: monthly running balance trend.
-- Categorical visualization: spending by category.
-- Transactions with search, filters, and sortable columns.
-- Simulated RBAC:
-  - Viewer: read-only
-  - Admin: add/edit transactions
+- React 19
+- Vite 8
+- ESLint 9
 
-4. User Experience
-- Clear controls with readable labels.
-- Empty states for no chart data, no table results, and no insights.
-- Inline admin editor for quick add/edit operations.
-
-5. Technical Quality
-- Modular code architecture:
-  - `components/` for UI sections
-  - `hooks/useFinanceDashboard.js` for orchestration
-  - `utils/` for selectors, reducer, formatting
-  - `data/` for seed/default state
-- Derived metrics and datasets are memoized.
-
-6. State Management Approach
-- Centralized `useReducer` state for role, transactions, filters, sorting, draft form, and theme.
-- Local storage persistence for app continuity across refreshes.
-
-## Project Structure
-
-- `src/App.jsx`
-- `src/components/Header.jsx`
-- `src/components/SummaryCards.jsx`
-- `src/components/ChartsSection.jsx`
-- `src/components/TransactionsSection.jsx`
-- `src/components/InsightsSection.jsx`
-- `src/hooks/useFinanceDashboard.js`
-- `src/utils/reducer.js`
-- `src/utils/selectors.js`
-- `src/utils/formatters.js`
-- `src/data/initialData.js`
-
-## Setup
+## Getting Started
 
 ```bash
 npm install
 npm run dev
 ```
 
-Build for production:
+App runs locally with Vite's development server.
 
-```bash
-npm run build
-npm run preview
-```
+## Scripts
 
-## Notes
+- `npm run dev` - start local development server
+- `npm run build` - create production build in `dist/`
+- `npm run preview` - preview production build locally
+- `npm run lint` - run ESLint checks
 
-- RBAC is simulated on frontend only (as requested).
-- Data is persisted in browser storage key: `finance-dashboard-state-v1`.
-- Currency uses `en-US` and USD formatting.
+## Project Structure
+
+- `src/App.jsx` - page composition and section orchestration.
+- `src/hooks/useFinanceDashboard.js` - reducer-driven state, derived data, local storage, and mock API sync.
+- `src/components/` - UI sections:
+  - `Header.jsx`
+  - `SummaryCards.jsx`
+  - `ChartsSection.jsx`
+  - `GovernanceSection.jsx`
+  - `PlanningSection.jsx`
+  - `TransactionsSection.jsx`
+  - `InsightsSection.jsx`
+- `src/utils/` - reducer, selectors, formatters, exporters.
+- `src/api/mockApi.js` - mocked fetch/save behavior.
+- `src/data/initialData.js` - seeded transactions and default app state.
+
+## Data and Persistence
+
+- Default seeded transactions are loaded from `src/data/initialData.js`.
+- Dashboard state is persisted in local storage under:
+  - `finance-dashboard-state-v1`
+- Currency formatting currently uses `en-US` locale and USD style.
