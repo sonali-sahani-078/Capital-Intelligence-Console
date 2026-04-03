@@ -34,6 +34,16 @@
 
 .eyebrow { margin: 0; font-size: 0.77rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
 h1 { margin: 0.42rem 0 0; font-family: 'Space Grotesk', 'Segoe UI', sans-serif; font-size: clamp(1.55rem, 2.3vw, 2.3rem); letter-spacing: -0.02em; text-wrap: balance; }
+.title-wordmark {
+  margin-top: 0.45rem;
+  width: clamp(260px, 48vw, 540px);
+  max-width: 100%;
+}
+.title-wordmark-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 .topbar-sub { margin-top: 0.45rem; max-width: 620px; color: var(--muted); font-size: 0.9rem; line-height: 1.45; }
 h2, h3, p { margin: 0; }
 h3 { letter-spacing: -0.01em; }
@@ -106,8 +116,8 @@ button.ghost:hover, button.sort:hover { border-color: color-mix(in srgb, var(--p
 .grid-line { stroke: color-mix(in srgb, var(--line), transparent 32%); stroke-width: 1; }
 .axis-text { fill: var(--muted); font-size: 10px; }
 .line-area { animation: fadeArea 700ms ease; }
-.line-stroke { fill: none; stroke: #14b8a6; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: drawLine 1200ms ease forwards; }
-.line-dot { fill: #14b8a6; stroke: color-mix(in srgb, #14b8a6, #fff 38%); stroke-width: 2; cursor: pointer; transition: r 160ms ease; }
+.line-stroke { fill: none; stroke: var(--chart-accent); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: drawLine 1200ms ease forwards; }
+.line-dot { fill: var(--chart-accent); stroke: color-mix(in srgb, var(--chart-accent), var(--surface) 38%); stroke-width: 2; cursor: pointer; transition: r 160ms ease; }
 .line-dot:hover { r: 6.8; }
 .chart-tooltip { pointer-events: none; }
 .tooltip-box { fill: color-mix(in srgb, var(--surface), #000 8%); stroke: color-mix(in srgb, var(--line), #fff 14%); }

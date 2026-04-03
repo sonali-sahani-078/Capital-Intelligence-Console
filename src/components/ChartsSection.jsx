@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { formatCurrency } from '../utils/formatters'
 
-const PALETTE = ['#14b8a6', '#f59e0b', '#6366f1', '#f43f5e', '#10b981', '#f97316', '#0ea5e9']
+const PALETTE = ['var(--chart-c1)', 'var(--chart-c2)', 'var(--chart-c3)', 'var(--chart-c4)', 'var(--chart-c5)', 'var(--chart-c6)', 'var(--chart-c7)']
 
 function BalanceTrendChart({ data }) {
   const [activePoint, setActivePoint] = useState(null)
@@ -69,8 +69,8 @@ function BalanceTrendChart({ data }) {
       <svg viewBox={`0 0 ${width} ${height}`} className="line-chart" role="img" aria-label="Balance trend chart">
         <defs>
           <linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.38" />
-            <stop offset="100%" stopColor="#14b8a6" stopOpacity="0.02" />
+            <stop offset="0%" stopColor="var(--chart-accent)" stopOpacity="0.38" />
+            <stop offset="100%" stopColor="var(--chart-accent)" stopOpacity="0.02" />
           </linearGradient>
         </defs>
 

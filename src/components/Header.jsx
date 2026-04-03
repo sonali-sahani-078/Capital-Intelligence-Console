@@ -1,9 +1,13 @@
+import { TitleWordmark } from './TitleWordmark'
+
 export function Header({ role, darkMode, onRoleChange, onThemeToggle }) {
   return (
     <header className="topbar">
       <div>
         <p className="eyebrow">Financial Activity Dashboard</p>
-        <h1>Capital Intelligence Console</h1>
+        <div className="title-wordmark">
+          <TitleWordmark />
+        </div>
         <p className="topbar-sub">A clean, decision-ready view of cash flow, spending behavior, and monthly momentum.</p>
       </div>
       <div className="topbar-actions">
