@@ -22,6 +22,7 @@ A React + Vite financial operations dashboard for tracking transactions, governa
 ## Tech Stack
 
 - React 19
+- React Context API + `useReducer`
 - Vite 8
 - ESLint 9
 

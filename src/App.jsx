@@ -6,7 +6,7 @@ import { InsightsSection } from './components/InsightsSection'
 import { PlanningSection } from './components/PlanningSection'
 import { SummaryCards } from './components/SummaryCards'
 import { TransactionsSection } from './components/TransactionsSection'
-import { useFinanceDashboard } from './hooks/useFinanceDashboard'
+import { useFinanceDashboardContext } from './context/FinanceDashboardContext'
 
 function App() {
   const {
@@ -27,7 +27,7 @@ function App() {
     insights,
     isLoading,
     syncStatus,
-  } = useFinanceDashboard()
+  } = useFinanceDashboardContext()
 
   return (
     <div className="app-shell">
