@@ -233,3 +233,191 @@ th button.sort { padding: 0; border: 0; background: transparent; font-weight: 80
 .group-panel strong {
   font-size: 0.96rem;
 }
+
+.governance-note {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-bottom: 0.9rem;
+}
+
+.kpi-grid article {
+  border: 1px solid color-mix(in srgb, var(--line), #fff 10%);
+  border-radius: 12px;
+  padding: 0.8rem;
+  background: color-mix(in srgb, var(--surface-alt), #fff 6%);
+}
+
+.kpi-grid p {
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.2rem;
+}
+
+.kpi-grid strong {
+  font-size: 1.03rem;
+}
+
+.budget-table-wrap {
+  overflow: auto;
+  border: 1px solid color-mix(in srgb, var(--line), #fff 10%);
+  border-radius: 12px;
+}
+
+.budget-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 620px;
+}
+
+.budget-table th,
+.budget-table td {
+  padding: 0.66rem 0.72rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--line), #fff 7%);
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.budget-table th {
+  background: color-mix(in srgb, var(--surface-alt), #fff 4%);
+}
+
+.util-cell {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.util-cell small {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.util-bar {
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--line), transparent 40%);
+  overflow: hidden;
+}
+
+.util-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+}
+
+.util-fill.good { background: color-mix(in srgb, var(--income), #fff 20%); }
+.util-fill.warn { background: #f59e0b; }
+.util-fill.over { background: color-mix(in srgb, var(--expense), #fff 5%); }
+
+.risk-list {
+  margin-top: 0.8rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.risk-item {
+  border: 1px solid color-mix(in srgb, var(--line), #fff 12%);
+  border-radius: 12px;
+  padding: 0.75rem;
+  background: color-mix(in srgb, var(--surface-alt), #fff 5%);
+}
+
+.risk-item p {
+  font-size: 0.76rem;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.risk-item.high { border-color: color-mix(in srgb, var(--expense), transparent 45%); }
+.risk-item.medium { border-color: color-mix(in srgb, #f59e0b, transparent 45%); }
+.risk-item.low { border-color: color-mix(in srgb, var(--income), transparent 45%); }
+
+.planning-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.planning-grid article {
+  border: 1px solid color-mix(in srgb, var(--line), #fff 10%);
+  border-radius: 12px;
+  padding: 0.75rem;
+  background: color-mix(in srgb, var(--surface-alt), #fff 5%);
+}
+
+.planning-grid p {
+  font-size: 0.76rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.2rem;
+}
+
+.planning-lists {
+  margin-top: 0.8rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+
+.planning-lists article {
+  border: 1px solid color-mix(in srgb, var(--line), #fff 10%);
+  border-radius: 12px;
+  padding: 0.7rem;
+  background: color-mix(in srgb, var(--surface-alt), #fff 4%);
+}
+
+.list-head {
+  margin-bottom: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.planning-lists ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.planning-lists li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  border-bottom: 1px dashed color-mix(in srgb, var(--line), transparent 45%);
+  padding-bottom: 0.3rem;
+}
+
+@media (max-width: 980px) {
+  .kpi-grid,
+  .risk-list,
+  .planning-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .planning-lists {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .kpi-grid,
+  .risk-list,
+  .planning-grid {
+    grid-template-columns: 1fr;
+  }
+}

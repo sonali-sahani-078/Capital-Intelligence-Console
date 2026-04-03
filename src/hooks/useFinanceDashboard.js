@@ -8,6 +8,12 @@ import {
   getGroupedTransactions,
   getInsights,
   getMonthlyTrend,
+  getExecutiveKpis,
+  getBudgetOverview,
+  getRiskAlerts,
+  getForecastMetrics,
+  getRecurringTransactions,
+  getDataQuality,
   getSummary,
 } from '../utils/selectors'
 import { formatCurrency } from '../utils/formatters'
@@ -87,10 +93,19 @@ export function useFinanceDashboard() {
   )
   const monthlyTrend = useMemo(() => getMonthlyTrend(state.transactions), [state.transactions])
   const categorySpend = useMemo(() => getCategorySpend(state.transactions), [state.transactions])
+  const executiveKpis = useMemo(() => getExecutiveKpis(state.transactions), [state.transactions])
+  const budgetOverview = useMemo(() => getBudgetOverview(state.transactions, formatCurrency), [state.transactions])
   const insights = useMemo(
     () => getInsights(state.transactions, categorySpend, formatCurrency),
     [state.transactions, categorySpend],
   )
+  const riskAlerts = useMemo(
+    () => getRiskAlerts(state.transactions, summary, budgetOverview, formatCurrency),
+    [state.transactions, summary, budgetOverview],
+  )
+  const forecastMetrics = useMemo(() => getForecastMetrics(state.transactions), [state.transactions])
+  const recurringTransactions = useMemo(() => getRecurringTransactions(state.transactions), [state.transactions])
+  const dataQuality = useMemo(() => getDataQuality(state.transactions), [state.transactions])
 
   return {
     state,
@@ -101,6 +116,12 @@ export function useFinanceDashboard() {
     groupedTransactions,
     monthlyTrend,
     categorySpend,
+    executiveKpis,
+    budgetOverview,
+    riskAlerts,
+    forecastMetrics,
+    recurringTransactions,
+    dataQuality,
     insights,
     isLoading,
     syncStatus,

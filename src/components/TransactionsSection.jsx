@@ -134,6 +134,7 @@ export function TransactionsSection({ state, categories, transactions, groupedTr
                 <th><button className="sort" onClick={() => dispatch({ type: 'setSort', key: 'category' })}>Category</button></th>
                 <th><button className="sort" onClick={() => dispatch({ type: 'setSort', key: 'type' })}>Type</button></th>
                 <th>Note</th>
+                <th>Risk Flag</th>
                 {state.role === 'admin' && <th>Actions</th>}
               </tr>
             </thead>
@@ -148,6 +149,13 @@ export function TransactionsSection({ state, categories, transactions, groupedTr
                   <td>{tx.category}</td>
                   <td><span className={`pill ${tx.type}`}>{tx.type}</span></td>
                   <td>{tx.note || '-'}</td>
+                  <td>
+                    {tx.type === 'expense' && tx.amount >= 1000 ? (
+                      <span className="pill expense">High</span>
+                    ) : (
+                      <span className="pill income">Normal</span>
+                    )}
+                  </td>
                   {state.role === 'admin' && (
                     <td>
                       <button className="ghost" onClick={() => dispatch({ type: 'startEdit', id: tx.id })}>Edit</button>

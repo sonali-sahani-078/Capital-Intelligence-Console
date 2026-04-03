@@ -1,7 +1,9 @@
 import './App.css'
 import { ChartsSection } from './components/ChartsSection'
+import { GovernanceSection } from './components/GovernanceSection'
 import { Header } from './components/Header'
 import { InsightsSection } from './components/InsightsSection'
+import { PlanningSection } from './components/PlanningSection'
 import { SummaryCards } from './components/SummaryCards'
 import { TransactionsSection } from './components/TransactionsSection'
 import { useFinanceDashboard } from './hooks/useFinanceDashboard'
@@ -16,6 +18,12 @@ function App() {
     groupedTransactions,
     monthlyTrend,
     categorySpend,
+    executiveKpis,
+    budgetOverview,
+    riskAlerts,
+    forecastMetrics,
+    recurringTransactions,
+    dataQuality,
     insights,
     isLoading,
     syncStatus,
@@ -31,6 +39,12 @@ function App() {
       />
       <SummaryCards summary={summary} />
       <ChartsSection monthlyTrend={monthlyTrend} categorySpend={categorySpend} />
+      <GovernanceSection budgetOverview={budgetOverview} riskAlerts={riskAlerts} executiveKpis={executiveKpis} />
+      <PlanningSection
+        forecastMetrics={forecastMetrics}
+        recurringTransactions={recurringTransactions}
+        dataQuality={dataQuality}
+      />
       <TransactionsSection
         state={state}
         categories={categories}
